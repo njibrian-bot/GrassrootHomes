@@ -716,7 +716,7 @@ footer {
   inset: 0;
   background:
     linear-gradient(to bottom, rgba(13,13,13,0.6) 0%, rgba(13,13,13,0.92) 100%),
-    url('../images/WhatsApp Image 2026-03-02 at 9.31.44 PM.jpeg') center/cover no-repeat;
+    url('../images/WhatsApp Image 2026-03-02 at 9.31.59 PM.jpeg') center/cover no-repeat;
 }
 .page-hero-content { position: relative; z-index: 2; }
 .page-hero-content h1 { color: var(--white); }
