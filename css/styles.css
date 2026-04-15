@@ -111,7 +111,7 @@ p { font-weight: 300; color: var(--text-muted); font-size: 0.95rem; }
   justify-content: space-between;
 }
 
-.nav-logo img { height: 90px; object-fit: contain; }
+.nav-logo img { height: 90px; width: 90px; object-fit: cover; border-radius: 50%; }
 
 .nav-links {
   display: flex;
@@ -653,7 +653,7 @@ footer {
   gap: 3.5rem;
 }
 
-.footer-brand img { height: 90px; object-fit: contain; margin-bottom: 1.2rem; }
+.footer-brand img { height: 90px; width: 90px; object-fit: cover; border-radius: 50%; margin-bottom: 1.2rem; }
 .footer-brand p { font-size: 0.85rem; max-width: 280px; }
 .footer-social {
   display: flex;
