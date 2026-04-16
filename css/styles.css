@@ -213,7 +213,7 @@ p { font-weight: 300; color: var(--text-muted); font-size: 0.95rem; }
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(to right, rgba(13,13,13,0.92) 45%, rgba(13,13,13,0.3) 100%),
+    linear-gradient(to right, rgba(13,13,13,0.78) 40%, rgba(13,13,13,0.10) 100%),
     url('../images/Copilot_20260414_224356.png') center/cover no-repeat;
 }
 
