@@ -2,10 +2,23 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>GrassrootHomes — Luxury Construction & Renovation | Canada & USA</title>
   <meta name="description" content="GrassrootHomes delivers bespoke luxury home construction and renovation across Canada and the United States. Crafting residences of enduring elegance." />
+
+  <!-- PWA / Installability -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#C9A84C" />
+
+  <!-- iOS / Safari -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="GrassrootHomes" />
+  <link rel="apple-touch-icon" href="images/Logo.png" />
+
+  <!-- Favicon -->
   <link rel="icon" href="images/Logo.png" />
+
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
@@ -480,6 +493,13 @@
       btn.textContent = 'Sent! We\'ll be in touch.';
       btn.disabled = true;
       btn.style.opacity = '0.7';
+    }
+
+    // Register service worker for PWA / offline support
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch(() => {});
+      });
     }
   </script>
 </body>

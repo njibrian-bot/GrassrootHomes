@@ -2,10 +2,23 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Gallery — GrassrootHomes | Luxury Construction &amp; Renovation</title>
   <meta name="description" content="Browse GrassrootHomes' portfolio of luxury custom builds and renovations across Canada and the United States." />
+
+  <!-- PWA / Installability -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#C9A84C" />
+
+  <!-- iOS / Safari -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="GrassrootHomes" />
+  <link rel="apple-touch-icon" href="images/Logo.png" />
+
+  <!-- Favicon -->
   <link rel="icon" href="images/Logo.png" />
+
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
@@ -310,6 +323,34 @@
       if (e.key === 'ArrowRight') { currentIndex = (currentIndex + 1) % visibleItems.length; updateLightbox(); }
       if (e.key === 'Escape')     { lightbox.classList.remove('open'); document.body.style.overflow = ''; }
     });
+
+    // Touch swipe support for lightbox (Android & iOS)
+    let swipeStartX = 0;
+    let swipeStartY = 0;
+    lightbox.addEventListener('touchstart', e => {
+      swipeStartX = e.changedTouches[0].clientX;
+      swipeStartY = e.changedTouches[0].clientY;
+    }, { passive: true });
+    lightbox.addEventListener('touchend', e => {
+      const dx = e.changedTouches[0].clientX - swipeStartX;
+      const dy = e.changedTouches[0].clientY - swipeStartY;
+      // Only trigger on predominantly horizontal swipes (>50px, less vertical drift than horizontal)
+      if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
+        if (dx < 0) {
+          currentIndex = (currentIndex + 1) % visibleItems.length;
+        } else {
+          currentIndex = (currentIndex - 1 + visibleItems.length) % visibleItems.length;
+        }
+        updateLightbox();
+      }
+    }, { passive: true });
+
+    // Register service worker for PWA / offline support
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch(() => {});
+      });
+    }
   </script>
 </body>
 </html>

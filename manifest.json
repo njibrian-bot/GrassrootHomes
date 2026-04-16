@@ -1,0 +1,41 @@
+{
+  "name": "GrassrootHomes",
+  "short_name": "GrassrootHomes",
+  "description": "Luxury Construction & Renovation across Canada and the United States",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0D0D0D",
+  "theme_color": "#C9A84C",
+  "lang": "en-CA",
+  "categories": ["business", "lifestyle"],
+  "icons": [
+    {
+      "src": "images/Logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "images/Logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "images/Square Logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "images/Copilot_20260414_224356.png",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "GrassrootHomes — Luxury Home Builder"
+    }
+  ]
+}
