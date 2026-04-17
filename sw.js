@@ -1,5 +1,5 @@
 /* GrassrootHomes Service Worker — PWA offline support */
-const CACHE_NAME = 'grassroothomes-v1';
+const CACHE_NAME = 'grassroothomes-v2';
 
 const CORE_ASSETS = [
   './',
@@ -15,7 +15,13 @@ const CORE_ASSETS = [
   './images/WhatsApp Image 2026-03-02 at 9.19.03 PM.jpeg',
   './images/WhatsApp Image 2026-03-02 at 9.20.09 PM.jpeg',
   './images/WhatsApp Image 2026-03-02 at 9.31.44 PM.jpeg',
-  './images/WhatsApp Image 2026-03-02 at 9.31.59 PM.jpeg'
+  './images/WhatsApp Image 2026-03-02 at 9.31.59 PM.jpeg',
+  './images/WhatsApp Image 2026-04-16 at 1.12.04 PM.jpeg',
+  './images/WhatsApp Image 2026-04-16 at 1.15.35 PM.jpeg',
+  './images/WhatsApp Image 2026-04-16 at 11.29.48 AM.jpeg',
+  './images/WhatsApp Image 2026-04-16 at 12.04.38 PM.jpeg',
+  './images/WhatsApp Image 2026-04-16 at 12.04.38 PM2.jpeg',
+  './images/WhatsApp Image 2026-04-16 at 12.36.07 PM.jpeg'
 ];
 
 /* Install: pre-cache core assets */
