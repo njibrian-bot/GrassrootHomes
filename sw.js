@@ -1,5 +1,5 @@
 /* GrassrootHomes Service Worker — PWA offline support */
-const CACHE_NAME = 'grassroothomes-v2';
+const CACHE_NAME = 'grassroothomes-v5';
 
 const CORE_ASSETS = [
   './',
