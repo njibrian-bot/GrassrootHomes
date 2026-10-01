@@ -1,34 +1,29 @@
-/* GrassrootHomes Service Worker — PWA offline support */
-const CACHE_NAME = 'grassroothomes-v5';
+/* GrassrootHomes Service Worker — PWA offline support
+   Network-first: visitors always get the latest published site when online.
+   The cache is only a fallback for when they're offline, so there's no
+   version number to bump when the site changes. */
+const CACHE_NAME = 'grassroothomes-v6';
 
+/* Small app shell saved up front so the site opens offline.
+   Gallery photos are saved as visitors view them. */
 const CORE_ASSETS = [
   './',
   './index.html',
   './gallery.html',
   './css/styles.css',
+  './manifest.json',
   './images/Logo.png',
-  './images/Square Logo.png',
-  './images/Copilot_20260414_224356.png',
-  './images/WhatsApp Image 2026-03-02 at 9.08.34 PM.jpeg',
-  './images/WhatsApp Image 2026-03-02 at 9.17.06 PM.jpeg',
-  './images/WhatsApp Image 2026-03-02 at 9.17.37 PM.jpeg',
-  './images/WhatsApp Image 2026-03-02 at 9.19.03 PM.jpeg',
-  './images/WhatsApp Image 2026-03-02 at 9.20.09 PM.jpeg',
-  './images/WhatsApp Image 2026-03-02 at 9.31.44 PM.jpeg',
-  './images/WhatsApp Image 2026-03-02 at 9.31.59 PM.jpeg',
-  './images/WhatsApp Image 2026-04-16 at 1.12.04 PM.jpeg',
-  './images/WhatsApp Image 2026-04-16 at 1.15.35 PM.jpeg',
-  './images/WhatsApp Image 2026-04-16 at 11.29.48 AM.jpeg',
-  './images/WhatsApp Image 2026-04-16 at 12.04.38 PM.jpeg',
-  './images/WhatsApp Image 2026-04-16 at 12.04.38 PM2.jpeg',
-  './images/WhatsApp Image 2026-04-16 at 12.36.07 PM.jpeg'
+  './images/Square Logo.png'
 ];
 
-/* Install: pre-cache core assets */
+/* Install: pre-cache the app shell. Each file is cached on its own so one
+   missing or renamed file can't stop the new service worker installing. */
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(CORE_ASSETS))
+      .then(cache => Promise.all(
+        CORE_ASSETS.map(asset => cache.add(asset).catch(() => {}))
+      ))
       .then(() => self.skipWaiting())
   );
 });
@@ -44,42 +39,37 @@ self.addEventListener('activate', event => {
   );
 });
 
-/* Fetch: cache-first for local assets, network-first for external */
+/* Fetch: network-first, fall back to the cache when offline */
 self.addEventListener('fetch', event => {
-  if (event.request.method !== 'GET') return;
+  const request = event.request;
+  if (request.method !== 'GET') return;
 
-  const url = new URL(event.request.url);
+  const url = new URL(request.url);
   const isLocal = url.origin === self.location.origin;
 
-  if (isLocal) {
-    /* Cache-first strategy for local files */
-    event.respondWith(
-      caches.match(event.request).then(cached => {
+  /* 'no-cache' makes the browser check with the server for a newer copy
+     instead of reusing its own HTTP cache, so updates show immediately. */
+  const networkFetch = !isLocal
+    ? fetch(request)
+    : request.mode === 'navigate'
+      ? fetch(request.url, { cache: 'no-cache', credentials: 'same-origin' })
+      : fetch(request, { cache: 'no-cache' });
+
+  event.respondWith(
+    networkFetch.then(response => {
+      /* Only keep complete responses (skips partial video range requests) */
+      if (response && response.status === 200) {
+        const clone = response.clone();
+        caches.open(CACHE_NAME).then(cache => cache.put(request, clone));
+      }
+      return response;
+    }).catch(() =>
+      caches.match(request, { ignoreSearch: true }).then(cached => {
         if (cached) return cached;
-        return fetch(event.request).then(response => {
-          if (response && response.status === 200) {
-            const clone = response.clone();
-            caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
-          }
-          return response;
-        }).catch(() => {
-          /* Offline fallback: serve index.html for navigation requests */
-          if (event.request.destination === 'document') {
-            return caches.match('./index.html');
-          }
-        });
+        /* Offline and never visited: show the home page */
+        if (request.mode === 'navigate') return caches.match('./index.html');
+        return Response.error();
       })
-    );
-  } else {
-    /* Network-first for external resources (fonts, flags CDN) */
-    event.respondWith(
-      fetch(event.request).then(response => {
-        if (response && response.status === 200) {
-          const clone = response.clone();
-          caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
-        }
-        return response;
-      }).catch(() => caches.match(event.request))
-    );
-  }
+    )
+  );
 });
