@@ -118,6 +118,12 @@
       <!-- Full Gallery Grid -->
       <div class="gallery-full" id="galleryGrid">
 
+        <!-- ── Aldersyde, Alberta ── -->
+        <div class="gallery-group-heading fade-up">
+          <h2>Aldersyde, Alberta</h2>
+          <span>Custom Home — Framing to Completion</span>
+        </div>
+
         <!-- Aldersyde: Stage 1 — Framing -->
         <div class="gallery-item fade-up" data-category="exterior construction">
           <img src="images/WhatsApp Image 2026-03-02 at 9.20.09 PM.jpeg"
@@ -148,6 +154,12 @@
                alt="Completed luxury home exterior at dusk"
                data-title="Final: Completed Home — Aldersyde, Alberta">
           <div class="gallery-overlay"><span>&#43;</span></div>
+        </div>
+
+        <!-- ── High River, Alberta ── -->
+        <div class="gallery-group-heading fade-up">
+          <h2>High River, Alberta</h2>
+          <span>Custom Home — Interiors, Build &amp; Exterior</span>
         </div>
 
         <!-- High River: Gourmet Kitchen -->
@@ -590,6 +602,15 @@
         galleryItems.forEach(item => {
           const cats = item.dataset.category || '';
           item.style.display = (filter === 'all' || cats.includes(filter)) ? '' : 'none';
+        });
+        // Hide a location heading when none of its photos match the filter
+        document.querySelectorAll('#galleryGrid .gallery-group-heading').forEach(heading => {
+          let el = heading.nextElementSibling, hasVisible = false;
+          while (el && !el.classList.contains('gallery-group-heading')) {
+            if (el.style.display !== 'none') { hasVisible = true; break; }
+            el = el.nextElementSibling;
+          }
+          heading.style.display = hasVisible ? '' : 'none';
         });
       });
     });
